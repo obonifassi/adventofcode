@@ -7,11 +7,9 @@ namespace adventofcode
     {
         static void Main(string[] args)
         {
-            var day1Result = Day1.find2Sum();
-            Console.WriteLine("day 1a: " + day1Result);
-
-            day1Result = Day1.find3Sum();
-            Console.WriteLine("day 1b: " + day1Result);
+            Day2 day2 = new Day2();
+            var validPasswordCount = day2.PasswordPhilosophy();
+            Console.WriteLine($"valid passwords: {validPasswordCount}");
         }
     }
 }
