@@ -28,6 +28,7 @@ namespace adventofcode._2020
 
             foreach(var kvp in items)
             {
+                //2Sum algorithm
                 var difference = Math.Abs(kvp.Key - TARGET);
 
                 if (items.ContainsKey(difference))
@@ -52,10 +53,12 @@ namespace adventofcode._2020
             {
                 HashSet<int> map = new HashSet<int>();
 
+                //find the difference for items[i]
                 int currentSum = (TARGET - items[i]);
 
                 for (int j = i + 1; j < (items.Length - 1); j++)
                 {
+                    //find two numbers that equal items[i], using the 2Sum algorithm
                     var difference = currentSum - items[j];
 
                     if (map.Contains(difference))
