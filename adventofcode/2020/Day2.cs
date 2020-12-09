@@ -19,13 +19,13 @@ namespace adventofcode._2020
             _input = File.ReadAllLines(path); 
         }
 
-        public int PasswordPhilosophy()
+        public int PasswordPhilosophyPart1()
         {
             int validPassword = 0;
 
             foreach (var item in _input)
             {
-                var currentItem = ProcessInput(item);
+                var currentItem = ProcessInput(item, IsMap: true);
 
                 if(currentItem.Map.ContainsKey(currentItem.Key))
                 {
@@ -41,7 +41,39 @@ namespace adventofcode._2020
             return validPassword;
         }
 
-        private PasswordInfo ProcessInput(string item)
+        public int PasswordPhilosophyPart2()
+        {
+            int validPassword = 0;
+
+            foreach (var item in _input)
+            {
+                var currentItem = ProcessInput(item);
+
+                var min = (currentItem.Min - 1);
+                var max = (currentItem.Max - 1);
+
+                bool p1 = false;
+                if(min <= currentItem.Values.Length)
+                {
+                    p1 = currentItem.Values[(currentItem.Min - 1)] == currentItem.Key;
+                }
+
+                bool p2 = false;
+                if (max <= currentItem.Values.Length)
+                {
+                    p2 = currentItem.Values[(currentItem.Max - 1)] == currentItem.Key;
+                }
+
+                if(p1 != p2)
+                {
+                    validPassword++;
+                }
+            }
+
+            return validPassword;
+        }
+
+        private PasswordInfo ProcessInput(string item, bool IsMap = false)
         {
             PasswordInfo result = new PasswordInfo();
 
@@ -54,16 +86,23 @@ namespace adventofcode._2020
 
             var key = entries[1].Split(":").FirstOrDefault();
 
-            var map = entries[2].GroupBy(x => x)
-                                .ToDictionary(y => y.Key.ToString(), y => y.Count());
-
-            return new PasswordInfo
+            PasswordInfo pwd = new PasswordInfo()
             {
                 Min = min,
                 Max = max,
-                Map = map,
                 Key = key
             };
+
+            if (IsMap)
+            {
+                pwd.Map = entries[2].GroupBy(x => x).ToDictionary(x => x.Key.ToString(), x => x.Count());
+            }
+            else
+            {
+                pwd.Values = entries[2].Select(x => x.ToString()).ToArray();
+            }
+
+            return pwd;
         }
 
         public class PasswordInfo
@@ -72,6 +111,7 @@ namespace adventofcode._2020
             public int Max { get; set; }
             public int Min { get; set; }
             public Dictionary<string,int> Map { get; set; }
+            public string[] Values { get; set; }
         }
     }
 }
