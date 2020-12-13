@@ -19,7 +19,7 @@ namespace adventofcode.Y2020.Day01
             yield return PartTwo(input);
         }
             
-        public long PartOne(string input)
+        long PartOne(string input)
         {
             var items = input
                             .Split("\n")
@@ -42,7 +42,7 @@ namespace adventofcode.Y2020.Day01
             return secretKey;
         }
 
-        public long PartTwo(string input)
+        long PartTwo(string input)
         {
             var items = input
                             .Split("\n")
