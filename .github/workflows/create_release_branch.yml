@@ -5,11 +5,8 @@ on:
       versionName:
         description: 'Name of version  (ie 5.5.0)'
         required: true
-      versionCode:
-        description: 'Version number (50500)'
-        required: true
       name:
-        description: 'Release name (i.e })'
+        description: 'Name of feature (be short and descriptive})'
         required: true
 jobs:
   createrelease:
@@ -18,7 +15,7 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    - name: Create release branch for {{ github.event.inputs.name }}
+    - name: Create release branch
       run: git checkout -b release/v${{ github.event.inputs.versionName }}-{{ github.event.inputs.name }}
     - name: Initialize mandatory git config
       run: |
