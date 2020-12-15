@@ -2,8 +2,11 @@ name: Create Release Branch
 on:
   workflow_dispatch:
     inputs:
-      versionName:
+	versionName:
         description: 'Name of version  (ie 5.5.0)'
+        required: true
+      versionCode:
+        description: 'Version Number (ie 50500)'
         required: true
       name:
         description: 'Name of feature (ie leaderboard-part2)'
@@ -21,8 +24,8 @@ jobs:
       run: |
        git config user.name "GitHub Actions"
        git config user.email noreply@github.com
-    - name: Change version number and name
-      run: printf '\next.version_name = "${{ github.event.inputs.versionName }}"\n' > app_versions.gradle
+	- name: Change version number and name
+      run: printf 'ext.version_code = ${{ github.event.inputs.versionCode }}\next.version_name = "${{ github.event.inputs.versionName }}"\n' > app_versions.gradle
     - name: Push new branch
       run: git push origin release/v${{ github.event.inputs.versionName }}
     - name: Create pull request into main
