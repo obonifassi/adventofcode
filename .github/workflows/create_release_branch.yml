@@ -48,8 +48,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-          tag_name: ${{ github.event.inputs.versionName }}
-          target_commitish: 'release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}'
+          tag_name: v${{ github.event.inputs.versionName }}
+          commitish: release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
           release_name: Release ${{ github.event.inputs.versionName }}
           body: |
             Changes in this Release
