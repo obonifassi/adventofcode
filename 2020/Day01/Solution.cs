@@ -1,32 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace adventofcode._2020
+namespace adventofcode.Y2020.Day01
 {
-    public class Day1
+    [DisplayNameAttribute("Report Repair")]
+    public class Solution : ISolver
     {
-        protected const string INPUT_FILE = @"2020\Day1Input.txt";
         protected const int TARGET = 2020;
-        protected static string[] _input;
-
-        public Day1 ()
+        
+        public IEnumerable<object> Solve(string input)
         {
-            string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), INPUT_FILE);
-            _input = File.ReadAllLines(path);
+            yield return PartOne(input);
+            yield return PartTwo(input);
         }
-
-        public long find2Sum()
+            
+        long PartOne(string input)
         {
-            var items = _input
+            var items = input
+                            .Split("\n")
                             .ToDictionary(x => Convert.ToInt32(x), y => Convert.ToInt32(y));
 
             long secretKey = 0;
 
-            foreach(var kvp in items)
+            foreach (var kvp in items)
             {
                 //2Sum algorithm
                 var difference = Math.Abs(kvp.Key - TARGET);
@@ -41,9 +42,10 @@ namespace adventofcode._2020
             return secretKey;
         }
 
-        public long find3Sum()
+        long PartTwo(string input)
         {
-            var items = _input
+            var items = input
+                            .Split("\n")
                             .Select(x => Convert.ToInt32(x.Trim()))
                             .ToArray();
 
