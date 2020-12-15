@@ -8,7 +8,7 @@ on:
       versionCode:
         description: 'Version number (50500)'
         required: true
-      releaseName:
+      name:
         description: 'Release name (i.e })'
         required: true
 jobs:
@@ -18,8 +18,8 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    - name: Create release branch for {{ github.event.inputs.releaseName }}
-      run: git checkout -b release/v${{ github.event.inputs.versionName }}-{{ github.event.inputs.releaseName }}
+    - name: Create release branch for {{ github.event.inputs.name }}
+      run: git checkout -b release/v${{ github.event.inputs.versionName }}-{{ github.event.inputs.name }}
     - name: Initialize mandatory git config
       run: |
        git config user.name "GitHub Actions"
