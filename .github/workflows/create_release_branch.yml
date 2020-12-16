@@ -24,18 +24,17 @@ jobs:
     - name: Push new branch
       run: git push origin release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
     - name: Create pull request into main
-      uses: thomaseizinger/create-pull-request@1.0.0
+      uses: peter-evans/create-pull-request@v3
       with:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       head: release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
+       token: ${{ secrets.GITHUB_TOKEN }}
+       branch: release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
        base: main
        title: v${{ github.event.inputs.versionName }} into main
-       reviewers: ${{ github.event.issue.user.login }}
+       author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
        body: |
            Hi!
-           This PR was created in response workflow running.
-           I've updated the version name and code commit: ${{ steps.make-commit.outputs.commit }}.
-    - name: Create Release
+           This PR was created in response to a workflow.
+    - name: Create Release and Tag
       id: create_release
       uses: actions/create-release@v1
       env:
