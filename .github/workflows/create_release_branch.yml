@@ -31,6 +31,7 @@ jobs:
        base: main
        title: v${{ github.event.inputs.versionName }} into main
        author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+       committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
        body: |
            Hi!
            This PR was created in response to a workflow.
