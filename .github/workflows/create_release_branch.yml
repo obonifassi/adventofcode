@@ -25,12 +25,13 @@ jobs:
       run: printf '\next.version_name = "${{ github.event.inputs.versionName }}"\n' > app_versions.gradle
     - name: Push new branch
       run: git push origin release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
-    uses: thomaseizinger/create-pull-request@1.0.0
+    - name: Create a pull request
+      uses: thomaseizinger/create-pull-request@1.0.0
       with:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       head: release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
-       base: main
-       title: v${{ github.event.inputs.versionName }} into main
-       body: |
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        head: release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
+        base: main
+        title: v${{ github.event.inputs.versionName }} into main
+        body: |
            Hi!
            This PR was created in response to a workflow.
