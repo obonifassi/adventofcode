@@ -25,13 +25,28 @@ jobs:
       run: printf '\next.version_name = "${{ github.event.inputs.versionName }}"\n' > app_versions.gradle
     - name: Push new branch
       run: git push origin release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
-    - name: Create a pull request
-      uses: thomaseizinger/create-pull-request@1.0.0
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        head: release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
-        base: main
-        title: v${{ github.event.inputs.versionName }} into main
-        body: |
-           Hi!
-           This PR was created in response to a workflow.
+    - Create a pull request v2
+        uses: repo-sync/pull-request@v2
+        with:
+        source_branch: release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}                                 # If blank, default: triggered branch
+        destination_branch: main                      # If blank, default: master
+        pr_title: v${{ github.event.inputs.versionName }} into main # Title of pull request
+        pr_body: ":crown: *An automated PR*"              # Full markdown support, requires pr_title to be set
+        # pr_template: ".github/PULL_REQUEST_TEMPLATE.md"   # Path to pull request template, requires pr_title to be set, excludes pr_body
+        # pr_reviewer: "wei,worker"                         # Comma-separated list (no spaces)
+        # pr_assignee: "wei,worker"                         # Comma-separated list (no spaces)
+        pr_label: "auto-pr"                               # Comma-separated list (no spaces)
+        # pr_milestone: "Milestone 1"                       # Milestone name
+        pr_draft: false                                    # Creates pull request as draft
+        pr_allow_empty: true                              # Creates pull request even if there are no changes
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+    #- name: Create a pull request
+     # uses: thomaseizinger/create-pull-request@1.0.0
+      #with:
+       # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        #head: release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
+        #base: main
+        #title: v${{ github.event.inputs.versionName }} into main
+        #body: |
+         #  Hi!
+          # This PR was created in response to a workflow.
