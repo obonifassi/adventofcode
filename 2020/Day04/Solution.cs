@@ -28,8 +28,6 @@ namespace adventofcode.Y2020.Day04
         public IEnumerable<object> Solve(string input)
         {
             yield return PartOne(input);
-            //
-            //
         }
 
         int PartOne(string input) => ValidCount(input, (map) =>
