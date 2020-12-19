@@ -1,4 +1,4 @@
-name: Create Release Branch
+name: Draft new release
 on:
   workflow_dispatch:
     inputs:
@@ -6,7 +6,7 @@ on:
         description: 'Name of version  (ie 5.5.0)'
         required: true
       name:
-        description: 'Name of feature (ie leaderboard-part2)'
+        description: 'Name of feature (ie scroll-window)'
         required: true
 jobs:
   createrelease:
@@ -22,22 +22,38 @@ jobs:
       run: |
        git config user.name ${{ github.actor }}
     - name: Change version number and name
-      run: printf '\next.version_name = "${{ github.event.inputs.versionName }}"\n' > app_versions.gradle
+      run: printf 'ext.version_code = ${{ github.event.inputs.versionCode }}\next.version_name = "${{ github.event.inputs.versionName }}"\n' > app_versions.gradle
     - name: Push new branch
       run: git push origin release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
-    - name: Create a pull request v2
+    - name: Create a pull request
       uses: repo-sync/pull-request@v2
       with:
-          source_branch: release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}                                 # If blank, default: triggered branch
-          destination_branch: main                      # If blank, default: master
-          pr_title: v${{ github.event.inputs.versionName }} into main # Title of pull request
-          pr_body: ":crown: *An automated PR*"              # Full markdown support, requires pr_title to be set
-          # pr_template: ".github/PULL_REQUEST_TEMPLATE.md"   # Path to pull request template, requires pr_title to be set, excludes pr_body
-          # pr_reviewer: "wei,worker"                         # Comma-separated list (no spaces)
-          # pr_assignee: "wei,worker"                         # Comma-separated list (no spaces)
-          pr_label: "auto-pr"                               # Comma-separated list (no spaces)
-          # pr_milestone: "Milestone 1"                       # Milestone name
-          pr_draft: false                                    # Creates pull request as draft
-          pr_allow_empty: true                              # Creates pull request even if there are no changes
+          source_branch: release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}    # If blank, default: triggered branch
+          destination_branch: main                                                                          # If blank, default: master
+          pr_title: v${{ github.event.inputs.versionName }} into main                                       # Title of pull request
+          pr_body: ":crown: *An automated PR*"                                                              # Full markdown support, requires pr_title to be set
+          # pr_template: ".github/PULL_REQUEST_TEMPLATE.md"                                                 # Path to pull request template, requires pr_title to be set, excludes pr_body
+          # pr_reviewer: "obonifassi"                                                                       # Comma-separated list (no spaces)
+          # pr_assignee: "obonifassi"                                                                       # Comma-separated list (no spaces)
+          pr_label: "auto-pr"                                                                               # Comma-separated list (no spaces)
+          # pr_milestone: "Milestone 1"                                                                     # Milestone name
+          pr_draft: false                                                                                   # Creates pull request as draft
+          pr_allow_empty: true                                                                              # Creates pull request even if there are no changes
           github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create Release and Tag
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}                                                           # This token is provided by Actions, you do not need to create your own token
+      with:
+          tag_name: v${{ github.event.inputs.versionName }}
+          commitish: release/v${{ github.event.inputs.versionName }}-${{ github.event.inputs.name }}
+          release_name: Release ${{ github.event.inputs.versionName }}
+          #body: |
+          #  Changes in this Release
+          #  - First Change
+          #  - Second Change
+          #body_path: A file with contents describing the release. Optional, and not needed if using body.
+          draft: true
+          prerelease: false
     

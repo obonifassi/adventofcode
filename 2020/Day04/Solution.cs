@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace adventofcode.Y2020.Day04
@@ -16,25 +17,53 @@ namespace adventofcode.Y2020.Day04
         Dictionary<string, string> requiredFields = new Dictionary<string, string>()
         {
             //the required fields to check
-            { "byr", "byr"},
-            { "iyr", "iyr"},
-            { "eyr", "eyr"},
-            { "hgt", "hgt"},
-            { "hcl", "hgt"},
-            { "ecl", "ecl"},
-            { "pid", "pid"},
+            { "byr", "19[2-9][0-9]|200[0-2]"},
+            { "iyr", "201[0-9]|2020"},
+            { "eyr", "202[0-9]|2030"},
+            { "hgt", "1[5-8][0-9]cm|19[0-3]cm|59in|6[0-9]in|7[0-6]in"},
+            { "hcl", "#[0-9a-f]{6}"},
+            { "ecl", "amb|blu|brn|gry|grn|hzl|oth"},
+            { "pid", "[0-9]{9}"},
         };
 
         public IEnumerable<object> Solve(string input)
         {
             yield return PartOne(input);
-            //
-            //
+            yield return PartTwo(input);
         }
 
         int PartOne(string input) => ValidCount(input, (map) =>
         {
             bool IsPassportValid = requiredFields.All(kvp => map.ContainsKey(kvp.Key));
+
+            return IsPassportValid;
+        });
+
+        int PartTwo(string input) => ValidCount(input, (map) =>
+        {
+            bool IsPassportValid = true;
+
+            foreach (var kvp in requiredFields)
+            {
+                var c1 = map.ContainsKey(kvp.Key);
+
+                if (c1 == false)
+                {
+                    return false;
+                }
+
+                if (c1)
+                {
+                    var value = map[kvp.Key];
+
+                    var c2 = Regex.IsMatch(value.Trim(), "^(" + kvp.Value + ")$");
+
+                    if (c2 == false)
+                    {
+                        return false;
+                    }
+                }
+            }
 
             return IsPassportValid;
         });
