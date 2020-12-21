@@ -11,28 +11,20 @@ using System.Threading.Tasks;
 namespace adventofcode.Y2020.Day02
 {
     [DisplayNameAttribute("Password Philosophy")]
-    public class Solution : ISolver
+    public class Solution : BaseSolution, ISolver
     {
         record PasswordEntry(int min, int max, char key, string password);
 
-        public IEnumerable<Tuple<object, long>> Solve(string input)
+        public IEnumerable<Tuple<long, long>> Solve(string input)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            long partOneResult = PartOne(input);
-            sw.Stop();
-            Tuple<object, long> partOne = new Tuple<object, long>(sw.ElapsedMilliseconds, partOneResult);
+            var partOne = Decorator(input, PartOne);
             yield return partOne;
 
-            sw = new Stopwatch();
-            sw.Start();
-            long partTwoResult = PartTwo(input);
-            sw.Stop();
-            Tuple<object, long> partTwo = new Tuple<object, long>(sw.ElapsedMilliseconds, partTwoResult);
+            var partTwo = Decorator(input, PartTwo);
             yield return partTwo;
         }
 
-        int PartOne(string input) => ValidateCount(input, (PasswordEntry passwordEntry) =>
+        long PartOne(string input) => ValidateCount(input, (PasswordEntry passwordEntry) =>
         {
             var count = passwordEntry.password.Count(ch => ch == passwordEntry.key);
 
@@ -44,7 +36,7 @@ namespace adventofcode.Y2020.Day02
             return false;
         });
 
-        int PartTwo(string input) => ValidateCount(input, (PasswordEntry passwordEntry) =>
+        long PartTwo(string input) => ValidateCount(input, (PasswordEntry passwordEntry) =>
         {
             bool p1 = false;
             if (passwordEntry.min <= passwordEntry.password.Length)
@@ -66,7 +58,7 @@ namespace adventofcode.Y2020.Day02
             return false;
         });
 
-        int ValidateCount(string input, Func<PasswordEntry, bool> isValid) => 
+        long ValidateCount(string input, Func<PasswordEntry, bool> isValid) => 
             input.Split("\n")
                 .Select(line =>
                 {

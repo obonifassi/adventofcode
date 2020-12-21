@@ -12,22 +12,14 @@ namespace adventofcode.Y2020.Day03
 {
     [DisplayNameAttribute("Toboggan Trajectory")]
 
-    public class Solution : ISolver
+    public class Solution : BaseSolution, ISolver
     {
-        public IEnumerable<Tuple<object, long>> Solve(string input)
+        public IEnumerable<Tuple<long, long>> Solve(string input)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            long partOneResult = PartOne(input);
-            sw.Stop();
-            Tuple<object, long> partOne = new Tuple<object, long>(sw.ElapsedMilliseconds, partOneResult);
+            var partOne = Decorator(input, PartOne);
             yield return partOne;
 
-            sw = new Stopwatch();
-            sw.Start();
-            long partTwoResult = PartTwo(input);
-            sw.Stop();
-            Tuple<object, long> partTwo = new Tuple<object, long>(sw.ElapsedMilliseconds, partTwoResult);
+            var partTwo = Decorator(input, PartTwo);
             yield return partTwo;
         }
 

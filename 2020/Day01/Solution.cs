@@ -10,27 +10,19 @@ using System.Text;
 namespace adventofcode.Y2020.Day01
 {
     [DisplayNameAttribute("Report Repair")]
-    public class Solution : ISolver
+    public class Solution : BaseSolution, ISolver
     {
         protected const int TARGET = 2020;
         
-        public IEnumerable<Tuple<object, long>> Solve(string input)
+        public IEnumerable<Tuple<long, long>> Solve(string input)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            long partOneResult = PartOne(input);
-            sw.Stop();
-            Tuple<object, long> partOne = new Tuple<object, long>(sw.ElapsedMilliseconds, partOneResult);
+            var partOne = Decorator(input, PartOne);
             yield return partOne;
 
-            sw = new Stopwatch();
-            sw.Start();
-            long partTwoResult = PartTwo(input);
-            sw.Stop();
-            Tuple<object, long> partTwo = new Tuple<object, long>(sw.ElapsedMilliseconds, partTwoResult);
+            var partTwo = Decorator(input, PartTwo);
             yield return partTwo;
         }
-            
+        
         long PartOne(string input)
         {
             var items = input
