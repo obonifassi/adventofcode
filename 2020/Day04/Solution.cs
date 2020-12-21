@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -26,10 +27,21 @@ namespace adventofcode.Y2020.Day04
             { "pid", "[0-9]{9}"},
         };
 
-        public IEnumerable<object> Solve(string input)
+        public IEnumerable<Tuple<object, long>> Solve(string input)
         {
-            yield return PartOne(input);
-            yield return PartTwo(input);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            long partOneResult = PartOne(input);
+            sw.Stop();
+            Tuple<object, long> partOne = new Tuple<object, long>(sw.ElapsedMilliseconds, partOneResult);
+            yield return partOne;
+
+            sw = new Stopwatch();
+            sw.Start();
+            long partTwoResult = PartTwo(input);
+            sw.Stop();
+            Tuple<object, long> partTwo = new Tuple<object, long>(sw.ElapsedMilliseconds, partTwoResult);
+            yield return partTwo;
         }
 
         int PartOne(string input) => ValidCount(input, (map) =>
@@ -47,21 +59,18 @@ namespace adventofcode.Y2020.Day04
             {
                 var c1 = map.ContainsKey(kvp.Key);
 
-                if (c1 == false)
+                if (!c1)
                 {
                     return false;
                 }
 
-                if (c1)
+                var value = map[kvp.Key];
+
+                var c2 = Regex.IsMatch(value.Trim(), "^(" + kvp.Value + ")$");
+
+                if (!c2)
                 {
-                    var value = map[kvp.Key];
-
-                    var c2 = Regex.IsMatch(value.Trim(), "^(" + kvp.Value + ")$");
-
-                    if (c2 == false)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
 

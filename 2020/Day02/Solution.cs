@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,10 +15,21 @@ namespace adventofcode.Y2020.Day02
     {
         record PasswordEntry(int min, int max, char key, string password);
 
-        public IEnumerable<object> Solve(string input)
+        public IEnumerable<Tuple<object, long>> Solve(string input)
         {
-            yield return PartOne(input);
-            yield return PartTwo(input);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            long partOneResult = PartOne(input);
+            sw.Stop();
+            Tuple<object, long> partOne = new Tuple<object, long>(sw.ElapsedMilliseconds, partOneResult);
+            yield return partOne;
+
+            sw = new Stopwatch();
+            sw.Start();
+            long partTwoResult = PartTwo(input);
+            sw.Stop();
+            Tuple<object, long> partTwo = new Tuple<object, long>(sw.ElapsedMilliseconds, partTwoResult);
+            yield return partTwo;
         }
 
         int PartOne(string input) => ValidateCount(input, (PasswordEntry passwordEntry) =>
