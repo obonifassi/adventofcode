@@ -13,7 +13,7 @@ namespace adventofcode.Y2020.Day04
 {
     [DisplayNameAttribute("Passport Processing")]
 
-    public class Solution : ISolver
+    public class Solution : BaseSolution, ISolver
     {
         Dictionary<string, string> requiredFields = new Dictionary<string, string>()
         {
@@ -27,31 +27,23 @@ namespace adventofcode.Y2020.Day04
             { "pid", "[0-9]{9}"},
         };
 
-        public IEnumerable<Tuple<object, long>> Solve(string input)
+        public IEnumerable<Tuple<long, long>> Solve(string input)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            long partOneResult = PartOne(input);
-            sw.Stop();
-            Tuple<object, long> partOne = new Tuple<object, long>(sw.ElapsedMilliseconds, partOneResult);
+            var partOne = Decorator(input, PartOne);
             yield return partOne;
 
-            sw = new Stopwatch();
-            sw.Start();
-            long partTwoResult = PartTwo(input);
-            sw.Stop();
-            Tuple<object, long> partTwo = new Tuple<object, long>(sw.ElapsedMilliseconds, partTwoResult);
+            var partTwo = Decorator(input, PartTwo);
             yield return partTwo;
         }
 
-        int PartOne(string input) => ValidCount(input, (map) =>
+        long PartOne(string input) => ValidCount(input, (map) =>
         {
             bool IsPassportValid = requiredFields.All(kvp => map.ContainsKey(kvp.Key));
 
             return IsPassportValid;
         });
 
-        int PartTwo(string input) => ValidCount(input, (map) =>
+        long PartTwo(string input) => ValidCount(input, (map) =>
         {
             bool IsPassportValid = true;
 
@@ -77,7 +69,7 @@ namespace adventofcode.Y2020.Day04
             return IsPassportValid;
         });
 
-        int ValidCount(string input, Func<Dictionary<string, string>, bool> isValid)
+        long ValidCount(string input, Func<Dictionary<string, string>, bool> isValid)
         {
             var items = input
                             .Split("\r\n\r\n")
