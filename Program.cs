@@ -1,5 +1,4 @@
-﻿using adventofcode.Y2020.Day01;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 

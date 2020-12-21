@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Text;
 
 namespace adventofcode
 {
@@ -16,7 +12,7 @@ namespace adventofcode
 
             Write(ConsoleColor.White, $"{solver.DayName()}: {solver.GetName()}");
             WriteLine();
-            
+
             var file = Path.Combine(workingDirectory, "input.txt");
             var input = GetNormalizedInput(file);
 
@@ -37,7 +33,7 @@ namespace adventofcode
         {
             var input = File.ReadAllText(file);
 
-            if(input.EndsWith("\n"))
+            if (input.EndsWith("\n"))
             {
                 input = input.Substring(0, input.Length - 1);
             }
