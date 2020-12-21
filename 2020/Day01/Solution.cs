@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace adventofcode.Y2020.Day01
 {
@@ -13,7 +9,7 @@ namespace adventofcode.Y2020.Day01
     public class Solution : BaseSolution, ISolver
     {
         protected const int TARGET = 2020;
-        
+
         public IEnumerable<Tuple<long, long>> Solve(string input)
         {
             var partOne = Decorator(input, PartOne);
@@ -22,7 +18,7 @@ namespace adventofcode.Y2020.Day01
             var partTwo = Decorator(input, PartTwo);
             yield return partTwo;
         }
-        
+
         long PartOne(string input)
         {
             var items = input

@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace adventofcode.Y2020.Day02
 {
@@ -58,7 +53,7 @@ namespace adventofcode.Y2020.Day02
             return false;
         });
 
-        long ValidateCount(string input, Func<PasswordEntry, bool> isValid) => 
+        long ValidateCount(string input, Func<PasswordEntry, bool> isValid) =>
             input.Split("\n")
                 .Select(line =>
                 {

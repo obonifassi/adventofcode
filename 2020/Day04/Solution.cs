@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace adventofcode.Y2020.Day04
 {
@@ -76,11 +71,11 @@ namespace adventofcode.Y2020.Day04
                             .Select(x => x.Split(new char[] { ' ', '\n' })
                                             .Select(y => y.Split(":"))
                                             .ToDictionary(y => y[0], y => y[1]));
-                            
+
             var count = items.Count(isValid);
 
             return count;
-                                            
+
         }
     }
 }
