@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -20,13 +21,12 @@ namespace adventofcode
             var input = GetNormalizedInput(file);
 
             List<string> answers = new List<string>();
-            
+
             foreach (var line in solver.Solve(input))
             {
                 answers.Add(line.ToString());
-
                 Write(ConsoleColor.Green, $"✓");
-                Console.Write($" {line} ");
+                Console.Write($" {line.Item2} ({line.Item1}ms)");
                 WriteLine();
             }
 

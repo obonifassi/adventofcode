@@ -22,7 +22,6 @@ namespace adventofcode
             {
                 Orchestrator.RunSolver(s);
             }
-
         }
     }
 }

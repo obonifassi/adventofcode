@@ -6,6 +6,6 @@ namespace adventofcode
 {
     interface ISolver
     {
-        IEnumerable<object> Solve(string input);
+        IEnumerable<Tuple<object, long>> Solve(string input);
     }
 }
