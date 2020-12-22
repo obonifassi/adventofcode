@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
+using System.Linq;
 
 namespace adventofcode.Y2020.Day06
 {
@@ -10,7 +12,32 @@ namespace adventofcode.Y2020.Day06
     {
         public IEnumerable<Tuple<long, long>> Solve(string input)
         {
-            throw new NotImplementedException();
+            var partOne = Decorator(input, PartOne);
+            yield return partOne;
+        }
+
+        long PartOne(string input) => Solve(input, (a, b) => a.Union(b));
+
+        long Solve(string input, Func<HashSet<char>, HashSet<char>, HashSet<char>> aggregateMethodToRun)
+        {
+            var groups = input.Split("\r\n\r\n")
+                    .Select(x =>
+                    {
+                        return x.Split("\r\n")
+                                .Select(y => y.ToHashSet());
+
+                    });
+
+            int runningSum = 0;
+
+            foreach (var group in groups)
+            {
+                var g = group.Aggregate(aggregateMethodToRun);
+                var count = g.Count;
+                runningSum += count;
+            }
+
+            return runningSum;
         }
     }
 }
