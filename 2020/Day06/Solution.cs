@@ -13,9 +13,14 @@ namespace adventofcode.Y2020.Day06
         {
             var partOne = Decorator(input, PartOne);
             yield return partOne;
+
+            var partTwo = Decorator(input, PartTwo);
+            yield return partTwo;
         }
 
         long PartOne(string input) => Solve(input, (a, b) => a.Union(b));
+
+        long PartTwo(string input) => Solve(input, (a, b) => a.Intersect(b));
 
         long Solve(string input, Func<HashSet<char>, HashSet<char>, HashSet<char>> aggregateMethodToRun)
         {
