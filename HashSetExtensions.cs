@@ -10,7 +10,7 @@ namespace adventofcode
             set.UnionWith(other);
             return set;
         }
-
+        
         public static HashSet<T> Intersect<T>(this HashSet<T> self, HashSet<T> other)
         {
             var set = new HashSet<T>(self);
