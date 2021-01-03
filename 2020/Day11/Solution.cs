@@ -20,42 +20,61 @@ namespace adventofcode.Y2020.Day11
 
         long PartOne(string input)
         {
-            var items = input.Split("\r\n").Select(x => x.ToCharArray()).ToArray();
+            var inputItems = input.Split("\r\n").Select(x => x.ToCharArray()).ToArray();
+            var items = inputItems.Select(a => a.ToArray()).ToArray();
 
-            //TODO: add a cache layer after seats are set
-            //If we see the seat arrangement again, we must have settled the arrangement
-            //Consider counting the seats
-            for(int i = 0; i < items.Length - 1; i++)
+            while (true)
             {
-                var row = items[i];
+                char[][] itemsToUpdate = new char[items.Length][];
 
-                for(int j = 0; j < row.Length - 1; j++)
+                for (int i = 0; i <= items.Length - 1; i++)
                 {
-                    bool IsValid = true;
+                    var row = items[i];
 
-                    //If a seat is empty (L) and there are no occupied seats adjacent to it, the seat becomes occupied.
-                    if (row[j] == 'L')
+                    char[] rowToUpdate = new char[row.Length];
+
+                    for (int j = 0; j <= row.Length - 1; j++)
                     {
-                        IsValid = CheckAdjacentSeats(items, i, j, '#');
+                        bool IsValid = true;
 
-                        if (IsValid)
+                        if (row[j] == 'L')
                         {
-                            items[i][j] = '#'; //seat becomes occupied
+                            rowToUpdate[j] = 'L';
+
+                            IsValid = CheckAdjacentSeats(items, i, j, '#');
+
+                            if (IsValid)
+                            {
+                                rowToUpdate[j] = '#'; //seat becomes occupied
+                            }
+                        }
+                        else if (row[j] == '#')
+                        {
+                            rowToUpdate[j] = '#';
+
+                            IsValid = CheckAdjacentSeats(items, i, j, '#');
+
+                            if (IsValid)
+                            {
+                                rowToUpdate[j] = 'L'; //seat becomes empty
+                            }
+                        }
+                        else
+                        {
+                            rowToUpdate[j] = '.';
                         }
                     }
-                    else if(row[j] == '#')
-                    {
-                        //If a seat is occupied(#) and four or more seats adjacent to it are also occupied, the seat becomes empty.
-                        IsValid = CheckAdjacentSeats(items, i, j, '#');
 
-                        if (IsValid)
-                        {
-                            items[i][j] = 'L'; //seat becomes empty
-                        }
-                    }
+                    itemsToUpdate[i] = rowToUpdate;
                 }
-            }
 
+                if(items.SequenceEqual(itemsToUpdate))
+                {
+                    break;
+                }
+
+                items = itemsToUpdate.Select(a => a.ToArray()).ToArray();
+            }
 
             return -1;
         }
@@ -74,7 +93,7 @@ namespace adventofcode.Y2020.Day11
             }
 
             //check left
-            if (j - 1 > 0 && row[j - 1] == characterToCheck)
+            if (j - 1 >= 0 && row[j - 1] == characterToCheck)
             {
                 IsValid = false;
                 runningCounter++;
@@ -88,21 +107,21 @@ namespace adventofcode.Y2020.Day11
             }
 
             //check up
-            if ((i - 1 > 0) && items[i - 1][j] == characterToCheck)
+            if ((i - 1 >= 0) && items[i - 1][j] == characterToCheck)
             {
                 IsValid = false;
                 runningCounter++;
             }
 
             //check right diagonal
-            if ((i - 1 > 0) && (j + 1 < row.Length - 1) && items[i - 1][j + 1] == characterToCheck)
+            if ((i - 1 >= 0) && (j + 1 < row.Length - 1) && items[i - 1][j + 1] == characterToCheck)
             {
                 IsValid = false;
                 runningCounter++;
             }
 
             //check left diagonal
-            if ((i + 1 < items.Length - 1) && (j - 1 > 0) && items[i + 1][j - 1] == characterToCheck)
+            if ((i + 1 < items.Length - 1) && (j - 1 >= 0) && items[i + 1][j - 1] == characterToCheck)
             {
                 IsValid = false;
                 runningCounter++;
@@ -116,7 +135,7 @@ namespace adventofcode.Y2020.Day11
             }
 
             //check left reverse diagonal
-            if ((i - 1 > 0) && (j - 1 > 0) && items[i - 1][j - 1] == '#')
+            if ((i - 1 >= 0) && (j - 1 >= 0) && items[i - 1][j - 1] == '#')
             {
                 IsValid = false;
                 runningCounter++;
