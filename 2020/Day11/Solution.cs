@@ -38,7 +38,7 @@ namespace adventofcode.Y2020.Day11
             {
                 for (int j = 0; j < currentIteration[i].Length; j++)
                 {
-                    if (currentIteration[i][j] == '#')
+                    if (currentIteration[i][j] == '#') 
                     {
                         seatOccupiedCount++;
                     }
@@ -46,6 +46,34 @@ namespace adventofcode.Y2020.Day11
             }
 
             return seatOccupiedCount;
+        }
+
+        long PartTwo(string input)
+        {
+            // b d a g l
+            // u n h x b
+            // f m q p v
+
+            char[][] table = new char[5][];
+
+            char[] c1 = new char[] { 'j', 'e', 'f', 'y', 'l' };
+            char[] c2 = new char[] { 'b', 'd', 'a', 'g', 'l'};
+            char[] c3 = new char[] { 'u', 'n', 'h', 'x', 'b' };
+            char[] c4 = new char[] { 'f', 'm', 'q', 'p', 'v' };
+            char[] c5 = new char[] { 'z', 'l', 'c', 'o', 'r' };
+
+            table[0] = c1;
+            table[1] = c2;
+            table[2] = c3;
+            table[3] = c4;
+            table[4] = c5;
+
+            var t1 = GetX(table, 2, 2);
+            var t2 = GetY(table, 2, 2);
+            var t3 = GetZ(table, 2, 2);
+
+
+            return -1;
         }
 
         (char[][], bool) GetNextIteration(char[][] items)
@@ -68,7 +96,7 @@ namespace adventofcode.Y2020.Day11
                     {
                         rowToUpdate[j] = 'L';
 
-                        IsValid = CheckAdjacentSeats(items, i, j, '#');
+                        IsValid = CheckAdjacentSeats(items, i, j, '#', 4);
 
                         if (IsValid)
                         {
@@ -80,7 +108,7 @@ namespace adventofcode.Y2020.Day11
                     {
                         rowToUpdate[j] = '#';
 
-                        IsValid = CheckAdjacentSeats(items, i, j, '#', true);
+                        IsValid = CheckAdjacentSeats(items, i, j, '#', 4, true);
 
                         if (IsValid)
                         {
@@ -100,7 +128,77 @@ namespace adventofcode.Y2020.Day11
             return (itemsToUpdate, IsStable);
         }
 
-        bool CheckAdjacentSeats(char[][] items, int i, int j, char characterToCheck, bool checkRunningCounter = false)
+        List<List<char>> GetX(char[][]items, int x, int y)
+        {
+            List<List<char>> result = new List<List<char>>();
+
+            var left = new List<char>();
+
+            for(int i = 0; i < x; i++)
+            {
+                left.Add(items[x][i]);
+            }
+
+            result.Add(left);
+
+            var right = new List<char>();
+            for (int i = y + 1; i <= (items[x].Length - 1); i++)
+            {
+                right.Add(items[x][i]);
+            }
+
+            result.Add(right);
+
+            return result;
+        }
+
+        List<List<char>> GetY(char[][] items, int x, int y)
+        {
+            List<List<char>> result = new List<List<char>>();
+
+            var up = new List<char>();
+            for (int i = 0; i < y; i++)
+            {
+                up.Add(items[i][x]);
+            }
+
+            result.Add(up);
+
+            var down = new List<char>();
+            for (int i = x + 1; i <= items.Length - 1; i++)
+            {
+                down.Add(items[i][x]);
+            }
+
+            result.Add(down);
+
+            return result;
+        }
+
+        List<List<char>> GetZ(char[][] items, int x, int y)
+        {
+            List<List<char>> result = new List<List<char>>();
+
+            var left = new List<char>();
+            for (int i = 1; (x - i) >= 0 && (y - i) >= 0; i++)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+            {
+                left.Add(items[x - i][y - i]);
+            }
+
+            result.Add(left);
+
+            var right = new List<char>();
+            for (int i = 1; (x + i) <= (items.Length - 1) && (y + i) <= (items[x].Length - 1); i++)
+            {
+                right.Add(items[x + i][y + i]);
+            }
+
+            result.Add(right);
+
+            return result;
+        }
+
+        bool CheckAdjacentSeats(char[][] items, int i, int j, char characterToCheck, int amountToCount, bool checkRunningCounter = false)
         {
             bool IsValid = true;
             int runningCounter = 0;
@@ -164,16 +262,13 @@ namespace adventofcode.Y2020.Day11
 
             if (checkRunningCounter)
             {
-                return (runningCounter >= 4);
+                return (runningCounter >= amountToCount);
             }
             else
             {
                 return IsValid;
             }
         }
-        long PartTwo(string input)
-        {
-            return -1;
-        }
+        
     }
 }
