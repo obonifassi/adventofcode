@@ -26,7 +26,7 @@ namespace adventofcode.Y2020.Day11
             var debugRunningCounter = 0;
             while (!isStable)
             {
-                var (nextIteration, stable) = GetNextIteration(currentIteration);
+                var (nextIteration, stable) = GetNextIteration(currentIteration, CheckAdjacentSeats, 4);
                 isStable = stable;
                 currentIteration = nextIteration;
                 debugRunningCounter++;
@@ -50,33 +50,36 @@ namespace adventofcode.Y2020.Day11
 
         long PartTwo(string input)
         {
-            // b d a g l
-            // u n h x b
-            // f m q p v
+            var inputItems = input.Split("\r\n").Select(x => x.ToCharArray()).ToArray();
+            var currentIteration = inputItems.Select(a => a.ToArray()).ToArray();
 
-            char[][] table = new char[5][];
+            bool isStable = false;
+            var debugRunningCounter = 0;
+            while (!isStable)
+            {
+                var (nextIteration, stable) = GetNextIteration(currentIteration, NearestNeighbors, 5);
+                isStable = stable;
+                currentIteration = nextIteration;
+                debugRunningCounter++;
+            }
 
-            char[] c1 = new char[] { 'j', 'e', 'f', 'y', 'l' };
-            char[] c2 = new char[] { 'b', 'd', 'a', 'g', 'l'};
-            char[] c3 = new char[] { 'u', 'n', 'h', 'x', 'b' };
-            char[] c4 = new char[] { 'f', 'm', 'q', 'p', 'v' };
-            char[] c5 = new char[] { 'z', 'l', 'c', 'o', 'r' };
+            //determine final count
+            var seatOccupiedCount = 0;
+            for (int i = 0; i < currentIteration.Length; i++)
+            {
+                for (int j = 0; j < currentIteration[i].Length; j++)
+                {
+                    if (currentIteration[i][j] == '#')
+                    {
+                        seatOccupiedCount++;
+                    }
+                }
+            }
 
-            table[0] = c1;
-            table[1] = c2;
-            table[2] = c3;
-            table[3] = c4;
-            table[4] = c5;
-
-            var t1 = GetX(table, 2, 2);
-            var t2 = GetY(table, 2, 2);
-            var t3 = GetZ(table, 2, 2);
-
-
-            return -1;
+            return seatOccupiedCount;
         }
 
-        (char[][], bool) GetNextIteration(char[][] items)
+        (char[][], bool) GetNextIteration(char[][] items, Func<char[][], int, int, List<char>> methodToRun, int patientTolerance)
         {
             bool IsStable = true;
 
@@ -91,12 +94,22 @@ namespace adventofcode.Y2020.Day11
                 for (int j = 0; j <= row.Length - 1; j++)
                 {
                     bool IsValid;
+                    int numOccupied = 0;
+                    var neighbors = methodToRun(items, i, j);
+
+                    foreach(var n in neighbors)
+                    {
+                        if(n == '#')
+                        {
+                            numOccupied += 1;
+                        }
+                    }
 
                     if (row[j] == 'L')
                     {
                         rowToUpdate[j] = 'L';
 
-                        IsValid = CheckAdjacentSeats(items, i, j, '#', 4);
+                        IsValid = numOccupied == 0;
 
                         if (IsValid)
                         {
@@ -108,7 +121,7 @@ namespace adventofcode.Y2020.Day11
                     {
                         rowToUpdate[j] = '#';
 
-                        IsValid = CheckAdjacentSeats(items, i, j, '#', 4, true);
+                        IsValid = numOccupied >= patientTolerance;
 
                         if (IsValid)
                         {
@@ -127,65 +140,53 @@ namespace adventofcode.Y2020.Day11
 
             return (itemsToUpdate, IsStable);
         }
-
-        List<List<char>> GetX(char[][]items, int x, int y)
+        
+        (List<char>, List<char>) GetX(char[][]items, int x, int y)
         {
-            List<List<char>> result = new List<List<char>>();
-
             var left = new List<char>();
 
-            for(int i = 0; i < x; i++)
+            for(int i = 0; i < y; i++)
             {
                 left.Add(items[x][i]);
             }
 
-            result.Add(left);
-
+            left.Reverse();
+            
             var right = new List<char>();
             for (int i = y + 1; i <= (items[x].Length - 1); i++)
             {
                 right.Add(items[x][i]);
             }
 
-            result.Add(right);
-
-            return result;
+            return (left, right);
         }
 
-        List<List<char>> GetY(char[][] items, int x, int y)
+        (List<char>, List<char>) GetY(char[][] items, int x, int y)
         {
-            List<List<char>> result = new List<List<char>>();
-
             var up = new List<char>();
-            for (int i = 0; i < y; i++)
+            for (int i = 0; i < x; i++)
             {
-                up.Add(items[i][x]);
+                up.Add(items[i][y]);
             }
 
-            result.Add(up);
-
+            up.Reverse();
+            
             var down = new List<char>();
             for (int i = x + 1; i <= items.Length - 1; i++)
             {
-                down.Add(items[i][x]);
+                down.Add(items[i][y]);
             }
 
-            result.Add(down);
-
-            return result;
+            return (up, down);
         }
 
-        List<List<char>> GetZ(char[][] items, int x, int y)
+        (List<char>, List<char>) GetZ(char[][] items, int x, int y)
         {
-            List<List<char>> result = new List<List<char>>();
-
             var left = new List<char>();
             for (int i = 1; (x - i) >= 0 && (y - i) >= 0; i++)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
             {
                 left.Add(items[x - i][y - i]);
             }
-
-            result.Add(left);
 
             var right = new List<char>();
             for (int i = 1; (x + i) <= (items.Length - 1) && (y + i) <= (items[x].Length - 1); i++)
@@ -193,82 +194,125 @@ namespace adventofcode.Y2020.Day11
                 right.Add(items[x + i][y + i]);
             }
 
-            result.Add(right);
-
-            return result;
+            return (left, right);
         }
 
-        bool CheckAdjacentSeats(char[][] items, int i, int j, char characterToCheck, int amountToCount, bool checkRunningCounter = false)
+        (List<char>, List<char>) GetW(char[][] items, int x, int y)
         {
-            bool IsValid = true;
-            int runningCounter = 0;
+            var left = new List<char>();
+            for (int i = 1; (x + i) <= items.Length - 1 && (y - i) >= 0; i++)
+            {
+                left.Add(items[x + i][y - i]);
+            }
+
+            var right = new List<char>();
+            for (int i = 1; (x - i) >= 0 && (y + i) <= (items[x].Length - 1); i++)
+            {
+                right.Add(items[x - i][y + i]);
+            }
+
+            return (left, right);
+        }
+
+        List<char> NearestNeighbors(char[][] items, int i, int j)
+        {
+            List<char> neighbors = new List<char>();
+
+            List<Func<char[][], int, int, (List<char>, List<char>)>> functionsToExecute = new List<Func<char[][], int, int, (List<char>, List<char>)>>
+            {
+                GetX,
+                GetY,
+                GetZ,
+                GetW
+            };
+
+            foreach (var f in functionsToExecute)
+            {
+                var results = f.Invoke(items, i, j);
+
+                foreach (var spot in results.Item1)
+                {
+                    if (spot != '.')
+                    {
+                        neighbors.Add(spot);
+                        //we know the list being returned has the neighbors closest to the point, at the beginning of the list. 
+                        //if we find a seat, we can break. it's considered the first in the list
+                        break;
+                    }
+                }
+
+                foreach (var spot in results.Item2)
+                {
+                    if (spot != '.')
+                    {
+                        neighbors.Add(spot);
+                        //we know the list being returned has the neighbors closest to the point, at the beginning of the list. 
+                        //if we find a seat, we can break. it's considered the first in the list
+                        break;
+                    }
+                }
+            }
+
+            return neighbors;
+        }
+        
+        List<char> CheckAdjacentSeats(char[][] items, int i, int j)
+        {
             var row = items[i];
+            char characterToCheck = '#';
+            List<char> neighbors = new List<char>();
 
             //check right
             if ((j + 1 <= row.Length - 1) && row[j + 1] == characterToCheck)
             {
-                IsValid = false;
-                runningCounter++;
+                neighbors.Add(row[j + 1]);
             }
 
             //check left
             if (j - 1 >= 0 && row[j - 1] == characterToCheck)
             {
-                IsValid = false;
-                runningCounter++;
+                neighbors.Add(row[j - 1]);
             }
 
             //check down
             if ((i + 1 <= items.Length - 1) && items[i + 1][j] == characterToCheck)
             {
-                IsValid = false;
-                runningCounter++;
+                neighbors.Add(items[i + 1][j]);
             }
 
             //check up
             if ((i - 1 >= 0) && items[i - 1][j] == characterToCheck)
             {
-                IsValid = false;
-                runningCounter++;
+                neighbors.Add(items[i - 1][j]);
             }
 
             //check right diagonal
             if ((i - 1 >= 0) && (j + 1 <= row.Length - 1) && items[i - 1][j + 1] == characterToCheck)
             {
-                IsValid = false;
-                runningCounter++;
+                neighbors.Add(items[i - 1][j + 1]);
             }
 
             //check left diagonal
             if ((i + 1 <= items.Length - 1) && (j - 1 >= 0) && items[i + 1][j - 1] == characterToCheck)
             {
-                IsValid = false;
-                runningCounter++;
+                neighbors.Add(items[i + 1][j - 1]);
             }
 
             //check right reverse diagonal
             if ((i + 1 <= items.Length - 1) && (j + 1 <= row.Length - 1) && items[i + 1][j + 1] == characterToCheck)
             {
-                IsValid = false;
-                runningCounter++;
+                neighbors.Add(items[i + 1][j + 1]);
             }
 
             //check left reverse diagonal
             if ((i - 1 >= 0) && (j - 1 >= 0) && items[i - 1][j - 1] == '#')
             {
-                IsValid = false;
-                runningCounter++;
+                //IsValid = false;
+                //runningCounter++;
+                neighbors.Add(items[i - 1][j - 1]);
             }
 
-            if (checkRunningCounter)
-            {
-                return (runningCounter >= amountToCount);
-            }
-            else
-            {
-                return IsValid;
-            }
+            return neighbors;
         }
-        
     }
 }
