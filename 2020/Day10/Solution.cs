@@ -24,16 +24,16 @@ namespace adventofcode.Y2020.Day10
             var sumDifferenceOf3 = 0;
 
             var items = GetJoltItems(input);
-            
-            for(int i = 0; i < items.Count - 1; i++)
+
+            for (int i = 0; i < items.Count - 1; i++)
             {
                 long difference = items[i + 1] - items[i];
 
-                if(difference == 1)
+                if (difference == 1)
                 {
                     sumDifferenceOf1++;
                 }
-                if(difference == 3)
+                if (difference == 3)
                 {
                     sumDifferenceOf3++;
                 }
@@ -50,11 +50,11 @@ namespace adventofcode.Y2020.Day10
 
             return result;
         }
-        
+
         ImmutableList<int> GetJoltItems(string input)
         {
             var items = input.Split("\r\n").Select(x => Int32.Parse(x.Trim())).OrderBy(x => x).ToList();
-            
+
             var result = ImmutableList.Create(0).AddRange(items).Add(items.Last() + 3);
 
             return result;
@@ -62,7 +62,7 @@ namespace adventofcode.Y2020.Day10
 
         long NumOfWays(ImmutableList<int> items, int i, Dictionary<int, long> cache)
         {
-            if(cache.ContainsKey(i))
+            if (cache.ContainsKey(i))
             {
                 var cachedValue = cache[i];
                 return cachedValue;
@@ -91,7 +91,7 @@ namespace adventofcode.Y2020.Day10
                 sum += NumOfWays(items, i + 3, cache);
             }
 
-            if(cache.ContainsKey(i))
+            if (cache.ContainsKey(i))
             {
                 cache[i] = i;
             }
