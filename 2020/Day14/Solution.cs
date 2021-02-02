@@ -20,56 +20,66 @@ namespace adventofcode.Y2020.Day14
 
         long PartOne(string input)
         {
-            var items = input.Split("\r\n");
-            var mask = items[0].Split("=")
-                                .Select(x => x.Trim())
-                                .ToArray()[1];
+            Dictionary<long, long> memory = new Dictionary<long, long>();
 
-            Dictionary<int, long> memory = new Dictionary<int, long>();
+            string[] stringSeparators = new string[] { "\r\n" };
+            var items = input.Split(stringSeparators, StringSplitOptions.None);
+            string mask = "";
 
-            for (int i = 1; i <= items.Length - 1; i++)
+            foreach (var item in items)
             {
-                var instruction = items[i].Split("=");
-                var startPointer = instruction[0].IndexOf("[");
-                var endPointer = instruction[0].IndexOf("]");
-
-                startPointer += 1;
-                endPointer -= startPointer;
-
-                var key = instruction[0].Substring(startPointer, endPointer);
-                var value = instruction[1];
-
-                var memKey = Convert.ToInt32(key.Trim());
-                var memValue = Convert.ToInt32(value.Trim());
-
-                var updatedValue = ApplyMask(memValue, mask);
-
-                if (!memory.ContainsKey(memKey))
+                if (item.IndexOf("mask") != -1)
                 {
-                    memory.Add(memKey, updatedValue);
+                    mask = GetMask(item);
                 }
                 else
                 {
-                    memory[memKey] = updatedValue;
+                    var (memKey, memValue) = GetKeyValue(item);
+
+                    var updatedValue = ApplyMask(memValue, mask);
+
+                    if (!memory.ContainsKey(memKey))
+                    {
+                        memory.Add(memKey, updatedValue);
+                    }
+                    else
+                    {
+                        memory[memKey] = updatedValue;
+                    }
                 }
             }
 
-            //var mask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X";
-            //mem[8] = 11
-            //mem[7] = 101
-            //mem[8] = 0
-            //var andMask = Convert.ToInt64(mask.Replace("X", "1"), 2);
-            //var orMask = Convert.ToInt64(mask.Replace("X", "0"), 2);
-            //var a = 11;
-            //var r = a & andMask;
-            //var r2 = r | orMask;
-
-            return -1;
+            return memory.Sum(y => y.Value);
         }
 
-        long ApplyMask(int value, string mask)
+        (long, long) GetKeyValue(string item)
         {
-            var paddedBits = Convert.ToString(value, 2).PadLeft(36, 0);
+            var instruction = item.Split("=");
+            var startPointer = instruction[0].IndexOf("[");
+            var endPointer = instruction[0].IndexOf("]");
+
+            startPointer += 1;
+            endPointer -= startPointer;
+
+            var key = instruction[0].Substring(startPointer, endPointer);
+            var value = instruction[1];
+
+            var memKey = Convert.ToInt64(key.Trim());
+            var memValue = Convert.ToInt64(value.Trim());
+            
+            return (memKey, memValue);
+        }
+
+        string GetMask(string item)
+        {
+            return item.Split("=")
+                    .Select(x => x.Trim())
+                    .ToArray()[1];
+        }
+
+        long ApplyMask(long value, string mask)
+        {
+            var paddedBits = Convert.ToString(value, 2).PadLeft(36, '0');
             
             StringBuilder sb = new StringBuilder();
 
