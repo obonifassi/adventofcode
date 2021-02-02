@@ -66,7 +66,7 @@ namespace adventofcode.Y2020.Day14
 
             var memKey = Convert.ToInt64(key.Trim());
             var memValue = Convert.ToInt64(value.Trim());
-            
+
             return (memKey, memValue);
         }
 
@@ -80,12 +80,12 @@ namespace adventofcode.Y2020.Day14
         long ApplyMask(long value, string mask)
         {
             var paddedBits = Convert.ToString(value, 2).PadLeft(36, '0');
-            
+
             StringBuilder sb = new StringBuilder();
 
-            for(int i = 0; i <= paddedBits.Length - 1; i++)
+            for (int i = 0; i <= paddedBits.Length - 1; i++)
             {
-                if(mask[i] == 'X')
+                if (mask[i] == 'X')
                 {
                     sb.Append(paddedBits[i]);
                 }

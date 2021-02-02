@@ -33,11 +33,11 @@ namespace adventofcode.Y2020.Day13
             int busId = 0;
             int counter = minTime;
 
-            while(processing)
+            while (processing)
             {
-                foreach(var bus in busIds)
+                foreach (var bus in busIds)
                 {
-                    if(counter % bus == 0)
+                    if (counter % bus == 0)
                     {
                         processing = false;
                         foundRoute = true;
@@ -47,7 +47,7 @@ namespace adventofcode.Y2020.Day13
                     }
                 }
 
-                if(foundRoute)
+                if (foundRoute)
                 {
                     break;
                 }

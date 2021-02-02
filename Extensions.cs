@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace adventofcode
+﻿namespace adventofcode
 {
     public static class Extensions
     {
