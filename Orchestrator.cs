@@ -35,7 +35,7 @@ namespace adventofcode
 
             if (input.EndsWith("\n"))
             {
-                input = input.Substring(0, input.Length - 1);
+                input = input[0..^1];
             }
 
             return input;

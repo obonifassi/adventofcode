@@ -38,7 +38,7 @@ namespace adventofcode.Y2020.Day11
             {
                 for (int j = 0; j < currentIteration[i].Length; j++)
                 {
-                    if (currentIteration[i][j] == '#') 
+                    if (currentIteration[i][j] == '#')
                     {
                         seatOccupiedCount++;
                     }
@@ -97,9 +97,9 @@ namespace adventofcode.Y2020.Day11
                     int numOccupied = 0;
                     var neighbors = methodToRun(items, i, j);
 
-                    foreach(var n in neighbors)
+                    foreach (var n in neighbors)
                     {
-                        if(n == '#')
+                        if (n == '#')
                         {
                             numOccupied += 1;
                         }
@@ -140,18 +140,18 @@ namespace adventofcode.Y2020.Day11
 
             return (itemsToUpdate, IsStable);
         }
-        
-        (List<char>, List<char>) GetX(char[][]items, int x, int y)
+
+        (List<char>, List<char>) GetX(char[][] items, int x, int y)
         {
             var left = new List<char>();
 
-            for(int i = 0; i < y; i++)
+            for (int i = 0; i < y; i++)
             {
                 left.Add(items[x][i]);
             }
 
             left.Reverse();
-            
+
             var right = new List<char>();
             for (int i = y + 1; i <= (items[x].Length - 1); i++)
             {
@@ -170,7 +170,7 @@ namespace adventofcode.Y2020.Day11
             }
 
             up.Reverse();
-            
+
             var down = new List<char>();
             for (int i = x + 1; i <= items.Length - 1; i++)
             {
@@ -183,7 +183,7 @@ namespace adventofcode.Y2020.Day11
         (List<char>, List<char>) GetZ(char[][] items, int x, int y)
         {
             var left = new List<char>();
-            for (int i = 1; (x - i) >= 0 && (y - i) >= 0; i++)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+            for (int i = 1; (x - i) >= 0 && (y - i) >= 0; i++)
             {
                 left.Add(items[x - i][y - i]);
             }
@@ -255,7 +255,7 @@ namespace adventofcode.Y2020.Day11
 
             return neighbors;
         }
-        
+
         List<char> CheckAdjacentSeats(char[][] items, int i, int j)
         {
             var row = items[i];
