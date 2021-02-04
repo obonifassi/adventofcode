@@ -20,11 +20,13 @@ namespace adventofcode.Y2020.Day14
 
         long PartOne(string input)
         {
-            Dictionary<long, long> memory = new Dictionary<long, long>();
+            var items = input.Split("\r\n")
+                             .Select(x => x.Trim())
+                             .ToArray();
 
-            string[] stringSeparators = new string[] { "\r\n" };
-            var items = input.Split(stringSeparators, StringSplitOptions.None);
             string mask = "";
+
+            Dictionary<long, long> memory = new Dictionary<long, long>();
 
             foreach (var item in items)
             {
@@ -36,7 +38,9 @@ namespace adventofcode.Y2020.Day14
                 {
                     var (memKey, memValue) = GetKeyValue(item);
 
-                    var updatedValue = ApplyMask(memValue, mask);
+                    var bits = ApplyMask(memValue, mask, 'X');
+
+                    var updatedValue = Convert.ToInt64(bits, 2);
 
                     if (!memory.ContainsKey(memKey))
                     {
@@ -50,6 +54,54 @@ namespace adventofcode.Y2020.Day14
             }
 
             return memory.Sum(y => y.Value);
+        }
+
+        long PartTwo(string input)
+        {
+            var items = input.Split("\r\n")
+                             .Select(x => x.Trim())
+                             .ToArray();
+
+            string mask = "";
+
+            Dictionary<long, long> memory = new Dictionary<long, long>();
+
+            foreach (var item in items)
+            {
+                if (item.IndexOf("mask") != -1)
+                {
+                    mask = GetMask(item);
+                }
+                else
+                {
+                    var (memKey, memValue) = GetKeyValue(item);
+
+                    var bits = ApplyMask(memKey, mask, '0');
+
+                    var keys = GetKeysToUpdate(bits);
+
+                    foreach (var key in keys)
+                    {
+                        if (!memory.ContainsKey(key))
+                        {
+                            memory.Add(key, memValue);
+                        }
+                        else
+                        {
+                            memory[key] = memValue;
+                        }
+                    }
+                }
+            }
+
+            return memory.Sum(z => z.Value);
+        }
+
+        string GetMask(string item)
+        {
+            return item.Split("=")
+                    .Select(x => x.Trim())
+                    .ToArray()[1];
         }
 
         (long, long) GetKeyValue(string item)
@@ -70,22 +122,16 @@ namespace adventofcode.Y2020.Day14
             return (memKey, memValue);
         }
 
-        string GetMask(string item)
+        string ApplyMask(long value, string mask, char unChangedCharacter)
         {
-            return item.Split("=")
-                    .Select(x => x.Trim())
-                    .ToArray()[1];
-        }
-
-        long ApplyMask(long value, string mask)
-        {
+            //convert to padded bits with leading zeros
             var paddedBits = Convert.ToString(value, 2).PadLeft(36, '0');
 
             StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i <= paddedBits.Length - 1; i++)
             {
-                if (mask[i] == 'X')
+                if (mask[i] == unChangedCharacter)
                 {
                     sb.Append(paddedBits[i]);
                 }
@@ -95,12 +141,64 @@ namespace adventofcode.Y2020.Day14
                 }
             }
 
-            return Convert.ToInt64(sb.ToString(), 2);
+            return sb.ToString();
         }
 
-        long PartTwo(string input)
+        List<long> GetKeysToUpdate(string item)
         {
-            return -1;
+            var charItems = item.ToCharArray();
+            List<long> result = new List<long>();
+            List<int> bitPositions = new List<int>();
+
+            //find bit positions and initialize to 0
+            for (int i = 0; i <= charItems.Length - 1; i++)
+            {
+                if (item[i] == 'X')
+                {
+                    bitPositions.Add(i);
+                    charItems[i] = '0';
+                }
+            }
+
+            //initial key
+            var k1 = Convert.ToInt64(new string(charItems), 2);
+            result.Add(k1);
+
+            for (int i = 0; i < Math.Pow(2, bitPositions.Count) - 1; i++)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                //get bits to process
+                for (int j = 0; j <= bitPositions.Count - 1; j++)
+                {
+                    var p = bitPositions[j];
+                    sb.Append(charItems[p]);
+                }
+
+                //convert to long
+                var temp = Convert.ToInt64(sb.ToString(), 2);
+
+                //add 1
+                temp += 1;
+
+                //re convert to bits
+                var bits = Convert.ToString(temp, 2).PadLeft(bitPositions.Count, '0');
+
+                //plug back in
+                for (int j = 0; j <= bits.Length - 1; j++)
+                {
+                    var itemToInsert = bits[j];
+                    var positionToInsert = bitPositions[j];
+
+                    charItems[positionToInsert] = itemToInsert;
+                }
+
+                //recalculate key
+                var kNth = Convert.ToInt64(new string(charItems), 2);
+                result.Add(kNth);
+            }
+
+            return result;
         }
     }
 }
