@@ -24,8 +24,26 @@ namespace adventofcode.Y2020.Day15
                         .Select(x => Convert.ToInt32(x.Trim()))
                         .ToArray();
 
+            var answer = Process(items, 2020);
+
+            return answer;
+        }
+
+        long PartTwo(string input)
+        {
+            var items = input.Split(",")
+                         .Select(x => Convert.ToInt32(x.Trim()))
+                         .ToArray();
+
+            var answer = Process(items, 30000000);
+
+            return answer;
+        }
+
+        long Process(int[] items, long target)
+        {
             Dictionary<int, LinkedList<int>> cache = new Dictionary<int, LinkedList<int>>();
-            
+
             //initialize
             for (int i = 0; i <= items.Length - 1; i++)
             {
@@ -39,7 +57,7 @@ namespace adventofcode.Y2020.Day15
             var currentCounter = items.Length + 1;
             var newList = new LinkedList<int>();
 
-            while (currentCounter <= 2020)
+            while (currentCounter <= target)
             {
                 if (cache.ContainsKey(previous))
                 {
@@ -82,19 +100,14 @@ namespace adventofcode.Y2020.Day15
                         newList.AddLast(currentCounter);
                     }
                 }
-                
+
                 currentCounter += 1;
 
                 //set the previous number
                 previous = nextNumber;
             }
-            
-            return previous;
-        }
 
-        long PartTwo(string input)
-        {
-            return -1;
+            return previous;
         }
     }
 }
