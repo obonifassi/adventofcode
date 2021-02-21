@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 
 namespace adventofcode.Y2020.Day15
 {
@@ -55,7 +54,6 @@ namespace adventofcode.Y2020.Day15
             var previous = items.Last();
             var nextNumber = -1;
             var currentCounter = items.Length + 1;
-            var newList = new LinkedList<int>();
 
             while (currentCounter <= target)
             {
@@ -80,6 +78,7 @@ namespace adventofcode.Y2020.Day15
                         nextNumber = difference;
                     }
 
+                    LinkedList<int> newList;
                     //insert the next number into the cache
                     if (!cache.ContainsKey(nextNumber))
                     {

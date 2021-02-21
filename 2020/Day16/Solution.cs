@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 
 namespace adventofcode.Y2020.Day16
 {
@@ -33,7 +32,7 @@ namespace adventofcode.Y2020.Day16
                     var s = item[(p + 1)..].Trim();
                     var ranges = s.Split("or").Select(x => x.Trim());
 
-                    foreach(var r in ranges)
+                    foreach (var r in ranges)
                     {
                         var start = r.Split("-").Select(x => Convert.ToInt32(x.Trim())).ToArray()[0];
                         var end = r.Split("-").Select(x => Convert.ToInt32(x.Trim())).ToArray()[1];
@@ -48,11 +47,11 @@ namespace adventofcode.Y2020.Day16
             var g2 = items[1].Split(new string[] { "\r\n", "," }, StringSplitOptions.None)
                              .Where(x => Int32.TryParse(x.Trim(), out int value) == true)
                              .Select(x => Convert.ToInt32(x));
-            
+
             var sum = 0;
             foreach (var number in g2)
             {
-                if(!map.Contains(number))
+                if (!map.Contains(number))
                 {
                     sum += number;
                 }
