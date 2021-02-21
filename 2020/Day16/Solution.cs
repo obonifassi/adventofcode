@@ -44,18 +44,34 @@ namespace adventofcode.Y2020.Day16
                 }
             }
 
-            //todo: process the second group
-            //ex:
-            //your ticket:
-            //97,101,149,103,137,61,59,223,263,179,131,113,241,127,53,109,89,173,107,211
+            //process the second group: your ticket:\r\n97,101,149,103,137,61,59,223,263,179,131,113,241,127,53,109,89,173,107,211
+            var g2 = items[1].Split(new string[] { "\r\n", "," }, StringSplitOptions.None)
+                             .Where(x => Int32.TryParse(x.Trim(), out int value) == true)
+                             .Select(x => Convert.ToInt32(x));
+            
+            var sum = 0;
+            foreach (var number in g2)
+            {
+                if(!map.Contains(number))
+                {
+                    sum += number;
+                }
+            }
 
-            //todo: process the third group
-            //ex:
-            //nearby tickets:
-            //446,499,748,453,135,109,525,721,179,796,622,944,175,303,882,287,177,185,828,423
+            //process the third group: nearby tickets:\r\n446,499,748,453,135,109,525,721,179,796,622,944,175,303,882,287,177,185,828,423
+            var g3 = items[2].Split(new string[] { "\r\n", "," }, StringSplitOptions.None)
+                             .Where(x => Int32.TryParse(x.Trim(), out int value) == true)
+                             .Select(x => Convert.ToInt32(x));
 
+            foreach (var number in g3)
+            {
+                if (!map.Contains(number))
+                {
+                    sum += number;
+                }
+            }
 
-            return -1;
+            return sum;
         }
 
         long PartTwo(string input)
