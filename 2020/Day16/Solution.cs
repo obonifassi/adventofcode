@@ -20,6 +20,58 @@ namespace adventofcode.Y2020.Day16
         long PartOne(string input)
         {
             var items = input.Split(new string[] { "\r\n\r\n" }, StringSplitOptions.None);
+
+            var (map, g2, g3) = GetMapRecords(items);
+
+            var sum = 0;
+            foreach (var number in g2)
+            {
+                if (!map.Contains(number))
+
+                {
+                    sum += number;
+                }
+            }
+
+            foreach (var number in g3)
+            {
+                if (!map.Contains(number))
+                {
+                    sum += number;
+                }
+            }
+
+            return sum;
+        }
+
+        long PartTwo(string input)
+        {
+            var items = input.Split(new string[] { "\r\n\r\n" }, StringSplitOptions.None);
+
+            var (map, g2, g3) = GetMapRecords(items);
+
+            //remove invalid numbers from our main map for group 2
+            foreach (var number in g2)
+            {
+                if (!map.Contains(number))
+                {
+                    map.Remove(number);
+                }
+            }
+            //remove invalid numbers from our main map for group 3
+            foreach (var number in g3)
+            {
+                if (!map.Contains(number))
+                {
+                    map.Remove(number);
+                }
+            }
+
+            return -1;
+        }
+
+        (HashSet<int>, IEnumerable<int>, IEnumerable<int>) GetMapRecords(string[] items)
+        {
             HashSet<int> map = new HashSet<int>();
 
             //process the first group: departure location: 37-479 or 485-954
@@ -48,34 +100,13 @@ namespace adventofcode.Y2020.Day16
                              .Where(x => Int32.TryParse(x.Trim(), out int value) == true)
                              .Select(x => Convert.ToInt32(x));
 
-            var sum = 0;
-            foreach (var number in g2)
-            {
-                if (!map.Contains(number))
-                {
-                    sum += number;
-                }
-            }
-
             //process the third group: nearby tickets:\r\n446,499,748,453,135,109,525,721,179,796,622,944,175,303,882,287,177,185,828,423
             var g3 = items[2].Split(new string[] { "\r\n", "," }, StringSplitOptions.None)
                              .Where(x => Int32.TryParse(x.Trim(), out int value) == true)
                              .Select(x => Convert.ToInt32(x));
 
-            foreach (var number in g3)
-            {
-                if (!map.Contains(number))
-                {
-                    sum += number;
-                }
-            }
+            return (map, g2, g3);
 
-            return sum;
-        }
-
-        long PartTwo(string input)
-        {
-            return -1;
         }
     }
 }
