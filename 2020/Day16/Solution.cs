@@ -21,7 +21,7 @@ namespace adventofcode.Y2020.Day16
         {
             var items = input.Split(new string[] { "\r\n\r\n" }, StringSplitOptions.None);
             Dictionary<string, HashSet<int>> rangeInstructions = new Dictionary<string, HashSet<int>>();
-            HashSet<int> globalMap = new HashSet<int>();
+            HashSet<int> globalMap = new HashSet<int>(); //used to keep track of the valid numbers in our grid
 
             //process the first group: departure location: 37-479 or 485-954
             var g1 = items[0].Split("\r\n");
@@ -51,10 +51,11 @@ namespace adventofcode.Y2020.Day16
             }
 
             //process the second group: your ticket:\r\n97,101,149,103,137,61,59,223,263,179,131,113,241,127,53,109,89,173,107,211
-            var g2 = items[1].Split(new string[] { "\r\n", "," }, StringSplitOptions.None)
+            var myTicket = items[1].Split(new string[] { "\r\n", "," }, StringSplitOptions.None)
                              .Where(x => Int32.TryParse(x.Trim(), out int value) == true)
-                             .Select(x => Convert.ToInt32(x));
-            
+                             .Select(x => Convert.ToInt32(x))
+                             .ToArray();
+
             //process the third group: nearby tickets:\r\n446,499,748,453,135,109,525,721,179,796,622,944,175,303,882,287,177,185,828,423
             var g3 = items[2].Split(new string[] { "\r\n" }, StringSplitOptions.None)
                              .Where(x => x.Contains(","))
@@ -74,10 +75,10 @@ namespace adventofcode.Y2020.Day16
                     {
                         var num = g3[j][i];
 
-                        if (!globalMap.Contains(num))
+                        if (!globalMap.Contains(num)) // ignore, an invalid ticket from part one
                         {
                             continue;
-                        } // ignore, an invalid ticket from part one
+                        } 
 
                         var ranges = kvp.Value;
                         if (!ranges.Contains(num))
@@ -118,44 +119,56 @@ namespace adventofcode.Y2020.Day16
             }
 
             Dictionary<int, string> result = new Dictionary<int, string>();
-
             
-            //while (result.Count < rangeInstructions.Count)
-            //{
-            //    foreach (var kvp in lookupMap)
-            //    {
-            //        var key = kvp.Value.FirstOrDefault().Key;
-            //        var value = kvp.Value.FirstOrDefault().Value;
+            //go through our constructed lookup map and work our way backwards. 
+            //keep finding the key that only contains 1 item, and continue removing from others, until we have no more items to process.
+            while (result.Count < rangeInstructions.Count)
+            {
+                foreach (var kvp in lookupMap)
+                {
+                    var key = kvp.Value.FirstOrDefault().Key;
+                    var value = kvp.Value.FirstOrDefault().Value;
 
-            //        if (kvp.Value.Count == 1 && value == 1)
-            //        {
-            //            result.Add(kvp.Key, key);
+                    if (kvp.Value.Count == 1 && value == 1)
+                    {
+                        result.Add(kvp.Key, key);
 
-            //            //go and find this key and remove from all others
-            //            foreach (var otherKvp in lookupMap)
-            //            {
-            //                var others = otherKvp.Value;
-            //                if (others.Count > 0 && others.ContainsKey(key))
-            //                {
-            //                    //if we only have 1, remove it
-            //                    var possible = others[key];
-            //                    if (possible == 1)
-            //                    {
-            //                        others.Remove(key);
-            //                    }
-            //                    else
-            //                    {
-            //                        //reduce by 1
-            //                        possible -= possible;
-            //                        others[key] = possible;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+                        //go and find this key and remove from all others
+                        foreach (var otherKvp in lookupMap)
+                        {
+                            var others = otherKvp.Value;
+                            if (others.Count > 0 && others.ContainsKey(key))
+                            {
+                                //if we only have 1, remove it
+                                var possible = others[key];
+                                if (possible == 1)
+                                {
+                                    others.Remove(key);
+                                }
+                                else
+                                {
+                                    //reduce by 1
+                                    possible -= possible;
+                                    others[key] = possible;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-            return -1;
+            //go through our ticket, and find the first 6 fields that start with the word "departure"
+            long resultMultiplied = 1;
+            for(int i = 0; i < result.Count; i++)
+            {
+                var resultItem = result[i];
+                if(resultItem.IndexOf("departure") != -1)
+                {
+                    resultMultiplied *= myTicket[i];
+                }
+            }
+
+            return resultMultiplied;
         }
 
         long PartOne(string input)

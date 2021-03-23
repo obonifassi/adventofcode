@@ -19,26 +19,24 @@ namespace adventofcode.Y2020.Day15
 
         long PartOne(string input)
         {
-            //var items = input.Split(",")
-            //            .Select(x => Convert.ToInt32(x.Trim()))
-            //            .ToArray();
+            var items = input.Split(",")
+                        .Select(x => Convert.ToInt32(x.Trim()))
+                        .ToArray();
 
-            //var answer = Process(items, 2020);
+            var answer = Process(items, 2020);
 
-            //return answer;
-            return -1;
+            return answer;
         }
 
         long PartTwo(string input)
         {
-            //var items = input.Split(",")
-            //             .Select(x => Convert.ToInt32(x.Trim()))
-            //             .ToArray();
+            var items = input.Split(",")
+                         .Select(x => Convert.ToInt32(x.Trim()))
+                         .ToArray();
 
-            //var answer = Process(items, 30000000);
+            var answer = Process(items, 30000000);
 
-            //return answer;
-            return -1;
+            return answer;
         }
 
         long Process(int[] items, long target)
