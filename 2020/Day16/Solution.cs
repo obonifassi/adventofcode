@@ -70,7 +70,7 @@ namespace adventofcode.Y2020.Day16
                 for (int i = 0; i < rangeInstructions.Count; i++)
                 {
                     bool isValid = true;
-                    
+
                     for (int j = 0; j < g3.Length; j++)
                     {
                         var num = g3[j][i];
@@ -78,7 +78,7 @@ namespace adventofcode.Y2020.Day16
                         if (!globalMap.Contains(num)) // ignore, an invalid ticket from part one
                         {
                             continue;
-                        } 
+                        }
 
                         var ranges = kvp.Value;
                         if (!ranges.Contains(num))
@@ -119,7 +119,7 @@ namespace adventofcode.Y2020.Day16
             }
 
             Dictionary<int, string> result = new Dictionary<int, string>();
-            
+
             //go through our constructed lookup map and work our way backwards. 
             //keep finding the key that only contains 1 item, and continue removing from others, until we have no more items to process.
             while (result.Count < rangeInstructions.Count)
@@ -159,10 +159,10 @@ namespace adventofcode.Y2020.Day16
 
             //go through our ticket, and find the first 6 fields that start with the word "departure"
             long resultMultiplied = 1;
-            for(int i = 0; i < result.Count; i++)
+            for (int i = 0; i < result.Count; i++)
             {
                 var resultItem = result[i];
-                if(resultItem.IndexOf("departure") != -1)
+                if (resultItem.IndexOf("departure") != -1)
                 {
                     resultMultiplied *= myTicket[i];
                 }

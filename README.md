@@ -1,8 +1,8 @@
-# Advent of Code (2020)
+# Advent of Code (2020-2022)
 C# solutions to the advent of code problems
 
 ## Dependencies
-- This project is based on `.NET 5`. It should work on Windows, Linux and OS X.
+- This project is based on `.NET 6`. It should work on Windows, Linux and OS X.
 
 ## How to
 To run the project:
