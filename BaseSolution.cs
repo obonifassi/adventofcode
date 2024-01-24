@@ -7,14 +7,15 @@ namespace adventofcode
     {
         public virtual Tuple<long, T> Decorator<T>(string input, Func<string, T> methodToRun)
         {
-            Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new();
+            
             sw.Start();
 
             var solution = methodToRun(input);
 
             sw.Stop();
 
-            Tuple<long, T> result = new Tuple<long, T>(sw.ElapsedMilliseconds, solution);
+            Tuple<long, T> result = new(sw.ElapsedMilliseconds, solution);
             return result;
         }
     }

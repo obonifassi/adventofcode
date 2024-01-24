@@ -13,7 +13,7 @@ namespace adventofcode
 
         public static HashSet<T> Intersect<T>(this HashSet<T> self, HashSet<T> other)
         {
-            var set = new HashSet<T>(self);
+            var set = new HashSet<T>(self); // don't change the original set
             set.IntersectWith(other);
             return set;
         }

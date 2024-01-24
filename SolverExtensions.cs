@@ -11,7 +11,7 @@ namespace adventofcode
             var year = solver.Year();
             var day = solver.Day();
 
-            var path = Path.Combine(year.ToString(), $"Day{day.ToString("00")}");
+            var path = Path.Combine(year.ToString(), $"Day{day:00}");
 
             return path;
         }
@@ -22,7 +22,7 @@ namespace adventofcode
                             .GetType()
                             .FullName;
 
-            var year = fullname.Split(".")[1].Substring(1);
+            var year = fullname.Split(".")[1][1..];
 
             return int.Parse(year);
         }
@@ -33,7 +33,7 @@ namespace adventofcode
                             .GetType()
                             .FullName;
 
-            var day = fullName.Split(".")[2].Substring(3);
+            var day = fullName.Split(".")[2][3..];
 
             return int.Parse(day);
         }

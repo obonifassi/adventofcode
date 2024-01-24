@@ -1,4 +1,4 @@
-# Advent of Code (2020-2022)
+# Advent of Code (2020-2024)
 C# solutions to the advent of code problems
 
 ## Dependencies
@@ -7,6 +7,6 @@ C# solutions to the advent of code problems
 ## How to
 To run the project:
 
-1. Install .NET Core
+1. Install .NET 6
 2. Clone the repo
 3. Get help with `dotnet run`

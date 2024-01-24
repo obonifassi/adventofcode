@@ -14,9 +14,10 @@ namespace adventofcode
             WriteLine();
 
             var file = Path.Combine(workingDirectory, "input.txt");
+            
             var input = GetNormalizedInput(file);
 
-            List<string> answers = new List<string>();
+            List<string> answers = new();
 
             foreach (var line in solver.Solve(input))
             {

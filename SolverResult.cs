@@ -1,4 +1,4 @@
 ﻿namespace adventofcode
 {
-    public record SolverResult(string[] answers);
+    public record SolverResult(string[] Answers);
 }
